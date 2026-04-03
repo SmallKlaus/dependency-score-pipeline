@@ -183,7 +183,7 @@ jobs:
           if-no-files-found: warn
 
   # ── 3. Merge all batch outputs into one file ──────────────────────────────
-merge:
+  merge:
     needs: score
     runs-on: ubuntu-latest
     if: always()
