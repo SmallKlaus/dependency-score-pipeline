@@ -163,7 +163,7 @@ jobs:
       - name: Run pipeline — batch ${{ matrix.batch.id }}
         run: |
           # Stop at 5h45m to leave time for artifact upload before the 6h wall
-          timeout 5h45m python dependency_score_pipeline.py \
+          timeout 345m python dependency_score_pipeline.py \
             --issues    ${{ inputs.issues_file }} \
             --repo      target_repo \
             --depends   depends.jar \
