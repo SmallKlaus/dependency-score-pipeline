@@ -1,0 +1,231 @@
+name: Dependency Score Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+
+      # ── Project being analysed ─────────────────────────────────────────
+      target_repo_url:
+        description: 'URL of the repo to analyse (HTTPS). Use token prefix for private repos: https://x-access-token:$TOKEN@github.com/org/repo.git'
+        required: true
+        default: 'https://github.com/apache/flink.git'
+
+      issues_file:
+        description: 'Path to issues JSON inside this repo (relative to root), e.g. issues/project_alpha.json'
+        required: true
+        default: 'issues/project_alpha.json'
+
+      # ── Parallelism ────────────────────────────────────────────────────
+      batch_count:
+        description: 'Number of parallel batches (max 20 on free tier; 256 on paid)'
+        required: true
+        default: '40'
+
+      # ── Pipeline tuning ────────────────────────────────────────────────
+      decay:
+        description: 'BFS decay factor (0.0–1.0). Lower = shorter reach.'
+        required: true
+        default: '0.5'
+
+      max_depth:
+        description: 'Maximum BFS depth'
+        required: true
+        default: '4'
+
+      depends_jar:
+        description: 'Path to depends.jar inside this repo, OR a full HTTPS download URL'
+        required: true
+        default: 'tools/depends.jar'
+
+      project_id:
+        description: 'Short identifier for this project run, used to find previous results (e.g. flink, kafka). Use the same value on reruns to resume.'
+        required: true
+        default: 'my-project'
+
+# ─────────────────────────────────────────────────────────────────────────────
+
+jobs:
+
+  # ── 1. Split issues.json into N batches ───────────────────────────────────
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.split.outputs.matrix }}
+      total:  ${{ steps.split.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build batch matrix
+        id: split
+        run: |
+          python3 - <<'PYEOF'
+          import json, math, os
+
+          issues_file = "${{ inputs.issues_file }}"
+          batch_count = int("${{ inputs.batch_count }}")
+
+          with open(issues_file) as f:
+              all_ids = list(json.load(f).keys())
+
+          total = len(all_ids)
+          size  = math.ceil(total / batch_count)
+          batches = [all_ids[i:i+size] for i in range(0, total, size)]
+
+          matrix = {
+              "batch": [
+                  {"id": str(i), "issues": " ".join(b)}
+                  for i, b in enumerate(batches)
+              ]
+          }
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as gh:
+              gh.write(f"matrix={json.dumps(matrix)}\n")
+              gh.write(f"total={total}\n")
+
+          print(f"✅  {total} issues → {len(batches)} batches of ≤{size}")
+          PYEOF
+
+  # ── 2. Run the pipeline in parallel batches ───────────────────────────────
+  score:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+      fail-fast: false
+    # Hard ceiling — GitHub will kill the job at 6h regardless, this is a safety label
+    timeout-minutes: 350
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: pip install networkx
+
+      - name: Resolve depends.jar
+        run: |
+          JAR="${{ inputs.depends_jar }}"
+          if [[ "$JAR" == http* ]]; then
+            curl -fsSL "$JAR" -o depends.jar
+          else
+            cp "$JAR" depends.jar
+          fi
+
+      - name: Clone target repository
+        env:
+          PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+        run: |
+          URL="${{ inputs.target_repo_url }}"
+          if [[ -n "$PRIVATE_REPO_TOKEN" && "$URL" == https://github.com/* ]]; then
+            URL="https://x-access-token:${PRIVATE_REPO_TOKEN}@${URL#https://}"
+          fi
+          git clone --filter=blob:none "$URL" target_repo
+          cd target_repo && git fetch --unshallow || true
+
+      # ── NEW: Pull any completed results from previous runs of the same project ──
+      - name: Restore previous results
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p output
+
+          PROJECT_ID="${{ inputs.project_id }}"
+          REPO="${{ github.repository }}"
+          CURRENT_RUN="${{ github.run_id }}"
+
+          echo "Looking for previous artifacts matching: scores-${PROJECT_ID}-batch-${{ matrix.batch.id }}"
+
+          # Find the most recent artifact from a PREVIOUS run with the same name
+          ARTIFACT_ID=$(gh api \
+            "repos/${REPO}/actions/artifacts?name=scores-${PROJECT_ID}-batch-${{ matrix.batch.id }}&per_page=10" \
+            --jq "[.artifacts[] | select(.workflow_run.id != ${CURRENT_RUN})] | sort_by(.created_at) | last | .id // empty"
+          )
+
+          if [[ -n "$ARTIFACT_ID" ]]; then
+            echo "Found previous artifact ID: $ARTIFACT_ID — downloading..."
+            gh api "repos/${REPO}/actions/artifacts/${ARTIFACT_ID}/zip" > prev_results.zip
+            unzip -o prev_results.zip -d output/
+            COUNT=$(ls output/*.json 2>/dev/null | wc -l)
+            echo "✅ Restored $COUNT previously completed issues — these will be skipped."
+          else
+            echo "No previous results found — starting fresh."
+          fi
+
+      # ── The Python call is now wrapped in timeout ──────────────────────────────
+      - name: Run pipeline — batch ${{ matrix.batch.id }}
+        run: |
+          # Stop at 5h45m to leave time for artifact upload before the 6h wall
+          timeout 5h45m python dependency_score_pipeline.py \
+            --issues    ${{ inputs.issues_file }} \
+            --repo      target_repo \
+            --depends   depends.jar \
+            --output    output/ \
+            --decay     ${{ inputs.decay }} \
+            --max-depth ${{ inputs.max_depth }} \
+            --cache \
+            --issues-filter ${{ matrix.batch.issues }} \
+          || echo "⚠️  timeout reached — uploading partial results"
+
+      # Always uploads — even if timeout fired (|| above ensures step exit code = 0)
+      - name: Upload batch results
+        uses: actions/upload-artifact@v4
+        with:
+          name: scores-${{ inputs.project_id }}-batch-${{ matrix.batch.id }}
+          path: output/*_dep_scores.json
+          if-no-files-found: warn
+
+  # ── 3. Merge all batch outputs into one file ──────────────────────────────
+merge:
+    needs: score
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download all batch artifacts for this project
+        uses: actions/download-artifact@v4
+        with:
+          pattern: scores-${{ inputs.project_id }}-batch-*
+          merge-multiple: true
+          path: all_outputs/
+
+      - name: Merge into single JSON
+        run: |
+          python3 - <<'PYEOF'
+          import json, pathlib
+
+          out_dir = pathlib.Path("all_outputs")
+          merged  = {}
+
+          for f in sorted(out_dir.glob("*_dep_scores.json")):
+              issue_id = f.stem.replace("_dep_scores", "")
+              # If the same issue appears in multiple artifacts (from retries),
+              # keep the one without an error key, or just the latest
+              existing = merged.get(issue_id)
+              new_entry = json.loads(f.read_text(encoding="utf-8"))
+              if existing is None or ("error" in existing and "error" not in new_entry):
+                  merged[issue_id] = new_entry
+
+          result_path = pathlib.Path("all_dependency_scores.json")
+          result_path.write_text(
+              json.dumps(merged, indent=2, ensure_ascii=False),
+              encoding="utf-8"
+          )
+
+          errors = [k for k, v in merged.items() if "error" in v]
+          print(f"✅  Merged {len(merged)} issues")
+          print(f"⚠️  {len(errors)} issues with errors: {errors if errors else 'none'}")
+          PYEOF
+
+      - name: Upload final merged results
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-dependency-scores-${{ inputs.project_id }}
+          path: all_dependency_scores.json
+          
