@@ -1,0 +1,1532 @@
+{
+    "MAPREDUCE-7237": {
+        "jira_id": "MAPREDUCE-7237",
+        "issue_type": "New Feature",
+        "resolution": "Fixed",
+        "title": "Supports config the shuffle's path cache related parameters",
+        "description": "Nowadays the ShuffleHandler#Shuffle#pathCache's related parameters is hard coding. We should support config these.",
+        "commits": [
+            {
+                "sha": "33997c43bd431c4c8d3be1d99440482996c3473c",
+                "message": "MAPREDUCE-7237. Supports config the shuffle's path cache related parameters",
+                "author": "jiwq",
+                "date": "2020-01-14T11:06:19Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 45,
+                        "LINES_DELETED": 52,
+                        "PARENT_LOC": 1421,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "1d772dc5429bfffa015a1209e6f4a864505c871a",
+        "sha_after": "ea688631b02bee4d514b4baa4d754fac8c41ff3a",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 45,
+                "LINES_DELETED": 52,
+                "PARENT_LOC": 1421,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7315": {
+        "jira_id": "MAPREDUCE-7315",
+        "issue_type": "New Feature",
+        "resolution": "Fixed",
+        "title": "LocatedFileStatusFetcher to collect/publish IOStatistics",
+        "description": "\r\nPart of HADOOP-16830: if a FileSystem's RemoteIterators implement IOStatisticsSource, then collect these and serve through the IOStatisticsSource API.\r\n\r\nIf the iterators don't (only S3A does, but ABFS will too), then nothing is collected",
+        "commits": [
+            {
+                "sha": "d28a1da2ce92c44c28a08a4df1d2b3ff9a322add",
+                "message": "MAPREDUCE-7315. LocatedFileStatusFetcher to collect/publish IOStatistics.",
+                "author": "steveloughran",
+                "date": "2020-12-31T12:04:15Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/LocatedFileStatusFetcher.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/LocatedFileStatusFetcher.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 58,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 413,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "99d08a19ba5d0464da1619a83db90c2f4b84a74b",
+        "sha_after": "9b2956e254d0ead4b87cf6d9013ecd2c4155151d",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/LocatedFileStatusFetcher.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/LocatedFileStatusFetcher.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 58,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 413,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7317": {
+        "jira_id": "MAPREDUCE-7317",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Add latency information in FileOutputCommitter.mergePaths",
+        "description": "We have been observed some occurrences of huge delay from file output committer V1, where file output committer V2 is not an option.\r\n\r\nWhile the root cause should have investigated on our side, there's another issue that there's insufficient information to debug. Most likely the huge delay comes from mergePaths, but the class only provides the \"debug\" log message to log the call itself with parameters, nothing else. mergePaths has been called recursively which is harder to trace how much latency specific directory takes to merge.\r\n\r\nIt would be nice and not intrusive to add latency info in mergePath, so that we can see how much latency specific directory takes to merge, only when debug log is enabled.\r\n\r\n(Ideally it'd be nice if we can log warn message when the call takes huge time to process, but I don't have the proper threshold for the \"huge time\", so I'd avoid dealing with it altogether here.)",
+        "commits": [
+            {
+                "sha": "228aef7f04729a065ce2ed8c16410ad57c8f1120",
+                "message": "Add latency information in FileOutputCommitter.mergePaths",
+                "author": "HeartSaVioR",
+                "date": "2021-01-18T05:29:11Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 9,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 753,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "62c765c6954b1086a38adbbeac3d28dd76b4d5a1",
+                "message": "Fix checkstyle",
+                "author": "HeartSaVioR",
+                "date": "2021-01-18T11:00:53Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 762,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "f6df90e70663545b4c5e3850fad2e61849b8e6c4",
+                "message": "Reflect review comment",
+                "author": "HeartSaVioR",
+                "date": "2021-01-27T03:53:45Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 35,
+                        "LINES_DELETED": 38,
+                        "PARENT_LOC": 762,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "977d1424f1e125e435b864fe84a867a5e1593930",
+                "message": "another review comment",
+                "author": "HeartSaVioR",
+                "date": "2021-01-27T12:22:45Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 5,
+                        "PARENT_LOC": 759,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "0bb52a42e50083b2c499d6ae69f12cf641182cbf",
+        "sha_after": "2a38ed0e0c0b75342dc6d3d78c7ff061a1b13ef0",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/lib/output/FileOutputCommitter.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 32,
+                "LINES_DELETED": 30,
+                "PARENT_LOC": 753,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7343": {
+        "jira_id": "MAPREDUCE-7343",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Increase the job name max length in mapred job -list ",
+        "description": "Presently the job name length is capped at 20, But in many cases(One being Hive). The length gets crossed in too many cases and post that it doesn't fetch much value.\r\n\r\n\u00a0\r\n\r\nPropose to increase the length limit from 20->35 here:\r\n{code:java}\r\nwriter.printf(dataPattern, job.getJobID().toString(),\r\n    job.getJobName().substring(0, jobNameLength > 20 ? 20 : jobNameLength),\r\n{code}\r\n\u00a0\r\n\r\n\u00a0",
+        "commits": [
+            {
+                "sha": "4123e9d5d626d909713b560e4c1b8e3344526556",
+                "message": "MAPREDUCE-7343. Increase the job name max length in mapred job -list.",
+                "author": "ayushtkn",
+                "date": "2021-05-10T13:12:09Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/tools/CLI.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/tools/CLI.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 4,
+                        "PARENT_LOC": 813,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "2e58fb671b4459aab581cf5da7e13ca905339930",
+        "sha_after": "5404ab4bca1884a7421d17a96b1b188790eecc47",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/tools/CLI.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/tools/CLI.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 4,
+                "PARENT_LOC": 813,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7354": {
+        "jira_id": "MAPREDUCE-7354",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Use empty array constants present in TaskCompletionEvent to avoid creating redundant objects",
+        "description": "As per one of the suggestions over PR#3115 (HDFS-16075), we should use empty array constant\u00a0present in TaskCompletionEvent to avoid creating redundant objects.",
+        "commits": [
+            {
+                "sha": "4be88c954ed37001ef8be76261575596ca4bccf9",
+                "message": "MAPREDUCE-7354. Use empty array constant present in TaskCompletionEvent to avoid creating redundant objects",
+                "author": "virajjasani",
+                "date": "2021-06-19T11:32:08Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/impl/JobImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/impl/JobImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 2323,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJob.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJob.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 111,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJobMonitorAndPrint.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJobMonitorAndPrint.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 9,
+                        "PARENT_LOC": 134,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/main/java/org/apache/hadoop/mapreduce/v2/hs/UnparsedJob.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/main/java/org/apache/hadoop/mapreduce/v2/hs/UnparsedJob.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 231,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "353f39933eeba05a30a3bb597b9596be6cfa319d",
+                "message": "remove unused import",
+                "author": "virajjasani",
+                "date": "2021-06-21T05:41:20Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJobMonitorAndPrint.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJobMonitorAndPrint.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 0,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 128,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "c488abbc79cc1ad2596cbf509a0cde14acc5ad6b",
+        "sha_after": "6e11461eaa7dfd6e8da5d1882fb8405f983bbcb9",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/impl/JobImpl.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/impl/JobImpl.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 1,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 2323,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJob.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJob.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 1,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 111,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJobMonitorAndPrint.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/TestJobMonitorAndPrint.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 3,
+                "LINES_DELETED": 10,
+                "PARENT_LOC": 134,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/main/java/org/apache/hadoop/mapreduce/v2/hs/UnparsedJob.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/main/java/org/apache/hadoop/mapreduce/v2/hs/UnparsedJob.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 1,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 231,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7351": {
+        "jira_id": "MAPREDUCE-7351",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "CleanupJob during handle of SIGTERM signal",
+        "description": "Currently MR CleanupJob happens when the job is either successful or fail. But during kill, it is not handled. This leaves all the temporary folders under the output path.",
+        "commits": [
+            {
+                "sha": "852d501c041837de05129b66d751a355eaeef0c0",
+                "message": "Added patch",
+                "author": "Shubham Gupta",
+                "date": "2021-07-05T04:57:34Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/MRAppMaster.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/MRAppMaster.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 10,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 1874,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "3278a345889f07854ce44be17eb62005028e0470",
+                "message": "Fix checkstyle",
+                "author": "Shubham Gupta",
+                "date": "2021-07-06T10:32:32Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/MRAppMaster.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/MRAppMaster.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 6,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 1884,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "c42441a1ec4338886130c8e1cb64852e218c83fc",
+        "sha_after": "3f4221ec343614ed36fcf1285040f375ed642da4",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/MRAppMaster.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/MRAppMaster.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 13,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 1874,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7201": {
+        "jira_id": "MAPREDUCE-7201",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Make Job History File Permissions configurable",
+        "description": "Job History File Permissions are hardcoded to 770. MAPREDUCE-7010 allows to configure the intermediate user directory permission but still the jhist file permission are not changed.",
+        "commits": [
+            {
+                "sha": "223c3040048e24a828cb9b2fd50b6e291cdc7d93",
+                "message": "MAPREDUCE-7201.Make Job History File Permissions configurable",
+                "author": "Ashutosh Gupta",
+                "date": "2022-06-27T22:12:43Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/jobhistory/JobHistoryEventHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/jobhistory/JobHistoryEventHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 1798,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-common/src/main/java/org/apache/hadoop/mapreduce/v2/jobhistory/JobHistoryUtils.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-common/src/main/java/org/apache/hadoop/mapreduce/v2/jobhistory/JobHistoryUtils.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 4,
+                        "PARENT_LOC": 664,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "4d58df8be8ba9be8d0470a0e0feffd7b53be7d33",
+                "message": "Added unit test",
+                "author": "Ashutosh Gupta",
+                "date": "2022-07-07T16:31:36Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/jobhistory/TestJobHistoryEventHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/jobhistory/TestJobHistoryEventHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 44,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 1138,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "e11ba5930e29a370f07685eac888bdb95aefc54f",
+        "sha_after": "4e8c0b902ec199af66dad60c454e16cc2114985a",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/jobhistory/JobHistoryEventHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/jobhistory/JobHistoryEventHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 3,
+                "PARENT_LOC": 1798,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/jobhistory/TestJobHistoryEventHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/jobhistory/TestJobHistoryEventHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 44,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 1138,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-common/src/main/java/org/apache/hadoop/mapreduce/v2/jobhistory/JobHistoryUtils.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-common/src/main/java/org/apache/hadoop/mapreduce/v2/jobhistory/JobHistoryUtils.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 1,
+                "LINES_DELETED": 4,
+                "PARENT_LOC": 664,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7407": {
+        "jira_id": "MAPREDUCE-7407",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Avoid stopContainer() on dead node",
+        "description": "If a container failed to launch earlier due to terminated instances, it has already been removed from the container hash map. Avoiding the kill() for CONTAINER_REMOTE_CLEANUP will avoid wasting 15min per container on retries/timeout.",
+        "commits": [
+            {
+                "sha": "3abd3f6f494875d011b114a14136319a3561a8ca",
+                "message": "MAPREDUCE-7407. Avoid stopContainer() on dead node",
+                "author": "Ashutosh Gupta",
+                "date": "2022-08-21T01:33:24Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 14,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 435,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 18,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 549,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "e3baf8b4f96fd23ad44096c61ae87e9ced1d7329",
+                "message": "Moving container check inside switch case and updating Logger",
+                "author": "Ashutosh Gupta",
+                "date": "2022-09-14T17:18:43Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 16,
+                        "LINES_DELETED": 19,
+                        "PARENT_LOC": 449,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "81bd5b59d9fef59b5fa8d2352cafd596bbf3b5a0",
+                "message": "removing .toString() from LOG",
+                "author": "Ashutosh Gupta",
+                "date": "2022-09-15T01:08:24Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 446,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "1cbbcec9dde54e77308408ce8299d182145d1116",
+                "message": "formatting lines",
+                "author": "Ashutosh Gupta",
+                "date": "2022-09-15T01:20:16Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 7,
+                        "PARENT_LOC": 565,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "37be43cb1394b41ac63ade371b2892b54514a3a4",
+                "message": "formatting lines",
+                "author": "Ashutosh Gupta",
+                "date": "2022-09-15T01:23:26Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 6,
+                        "PARENT_LOC": 562,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "6422eaf3017eed43d081406ab0c41426c9b6dc6f",
+        "sha_after": "59d3c201184fc9d94843106789e2d23c253d779c",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/launcher/ContainerLauncherImpl.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 16,
+                "LINES_DELETED": 5,
+                "PARENT_LOC": 435,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/launcher/TestContainerLauncherImpl.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 19,
+                "LINES_DELETED": 9,
+                "PARENT_LOC": 549,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7411": {
+        "jira_id": "MAPREDUCE-7411",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Use secure XML parser utils in MapReduce",
+        "description": "Uptake of\u00a0HADOOP-18469\r\n\r\nIf anyone is landing on this page following any security scanner alert, know that there is no known issue here, just a centralisation of all construction of XML parsers with lockdown of all the features.",
+        "commits": [
+            {
+                "sha": "975f92cfdf1920c1dd709d3e3ce4471e94d86f40",
+                "message": "MAPREDUCE-7411: use secure XML parsers",
+                "author": "pjfanning",
+                "date": "2022-10-06T20:33:57Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServices.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServices.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 355,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempt.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempt.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 276,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempts.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempts.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 676,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobConf.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobConf.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 271,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobs.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobs.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 6,
+                        "LINES_DELETED": 5,
+                        "PARENT_LOC": 929,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesTasks.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesTasks.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 787,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/QueueConfigurationParser.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/QueueConfigurationParser.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 7,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 471,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServices.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServices.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 305,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesAttempts.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesAttempts.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 694,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobConf.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobConf.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 285,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobs.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobs.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 6,
+                        "LINES_DELETED": 5,
+                        "PARENT_LOC": 840,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesTasks.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesTasks.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 803,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/TestQueueConfigurationParser.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/TestQueueConfigurationParser.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 74,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "d93e6f0cbb33fd6c330b3a585c27c74579efc28d",
+        "sha_after": "aac87ffe76451c2fd535350b7aefb384e2be6241",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServices.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServices.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 3,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 355,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempt.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempt.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 3,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 276,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempts.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesAttempts.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 3,
+                "PARENT_LOC": 676,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobConf.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobConf.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 2,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 271,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobs.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesJobs.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 6,
+                "LINES_DELETED": 5,
+                "PARENT_LOC": 929,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesTasks.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/test/java/org/apache/hadoop/mapreduce/v2/app/webapp/TestAMWebServicesTasks.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 3,
+                "PARENT_LOC": 787,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/QueueConfigurationParser.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/QueueConfigurationParser.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 7,
+                "LINES_DELETED": 3,
+                "PARENT_LOC": 471,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServices.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServices.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 2,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 305,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesAttempts.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesAttempts.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 3,
+                "PARENT_LOC": 694,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobConf.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobConf.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 2,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 285,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobs.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesJobs.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 6,
+                "LINES_DELETED": 5,
+                "PARENT_LOC": 840,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesTasks.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-hs/src/test/java/org/apache/hadoop/mapreduce/v2/hs/webapp/TestHsWebServicesTasks.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 3,
+                "PARENT_LOC": 803,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/TestQueueConfigurationParser.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/TestQueueConfigurationParser.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 3,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 74,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-5608": {
+        "jira_id": "MAPREDUCE-5608",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Replace and deprecate mapred.tasktracker.indexcache.mb",
+        "description": "In MR2 mapred.tasktracker.indexcache.mb still works for configuring the size of the shuffle service index cache.  As the tasktracker no longer exists, we should replace this with something like mapreduce.shuffle.indexcache.mb. ",
+        "commits": [
+            {
+                "sha": "2cec8a370f7e45cbdc91ca696d8dc71d4eceb859",
+                "message": "MAPREDUCE-5608. Replace and deprecate mapred.tasktracker.indexcache.mb",
+                "author": "Ashutosh Gupta",
+                "date": "2022-10-13T11:47:39Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/IndexCache.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/IndexCache.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 197,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/MRJobConfig.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/MRJobConfig.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 1307,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/server/tasktracker/TTConfig.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/server/tasktracker/TTConfig.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 6,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 38,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/util/ConfigUtil.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/util/ConfigUtil.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 438,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapred/TestIndexCache.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapred/TestIndexCache.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 6,
+                        "LINES_DELETED": 6,
+                        "PARENT_LOC": 331,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "9cec92045901c1a2ac6a7248b09de2c9f2be10be",
+                "message": "remove unused import",
+                "author": "Ashutosh Gupta",
+                "date": "2022-10-13T16:44:35Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/IndexCache.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/IndexCache.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 0,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 198,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "61317068f44989f9eb39fa398481d4061ffe8301",
+                "message": "making SHUFFLE_INDEX_CACHE public static final",
+                "author": "Ashutosh Gupta",
+                "date": "2022-11-08T20:14:36Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/MRJobConfig.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/MRJobConfig.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 1309,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "04b31d7ecfc86564f14055d17765e15d51c46a26",
+        "sha_after": "a48e8c9bebf4ab7b46eccac07e9743d4038b45c2",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/IndexCache.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/IndexCache.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 2,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 197,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/MRJobConfig.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/MRJobConfig.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 2,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 1307,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/server/tasktracker/TTConfig.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/server/tasktracker/TTConfig.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 6,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 38,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/util/ConfigUtil.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/util/ConfigUtil.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 4,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 438,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapred/TestIndexCache.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapred/TestIndexCache.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 6,
+                "LINES_DELETED": 6,
+                "PARENT_LOC": 331,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7431": {
+        "jira_id": "MAPREDUCE-7431",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "ShuffleHandler is not working correctly in SSL mode after the Netty 4 upgrade",
+        "description": "HADOOP-15327 introduced some regressions in the ShuffleHandler.\r\nh3. 1. a memory leak\r\n{code:java}\r\nERROR io.netty.util.ResourceLeakDetector: LEAK: ByteBuf.release() was not called before it's garbage-collected. See https://netty.io/wiki/reference-counted-objects.html for more information.\r\n{code}\r\n\u00a0\r\nThe Shuffle's channelRead didn't release the message properly, the fix would be this:\r\n{code:java}\r\n      try {\r\n        // ....\r\n      } finally {\r\n        ReferenceCountUtil.release(msg);\r\n      }\r\n{code}\r\nOr even simpler:\r\n{code:java}\r\nextends SimpleChannelInboundHandler<FullHttpRequest>\r\n{code}\r\nh3. 1. a bug in SSL mode with more than 1 reducers\r\n\r\nIt manifested in multiple errors:\r\n{code:java}\r\nERROR org.apache.hadoop.mapred.ShuffleHandler: Future is unsuccessful. Cause:\r\njava.io.IOException: Broken pipe\r\n\r\nERROR org.apache.hadoop.mapred.ShuffleHandler: Future is unsuccessful. Cause:\r\njava.nio.channels.ClosedChannelException\r\n\r\n// if the reducer memory was not enough, then even this:\r\nError: org.apache.hadoop.mapreduce.task.reduce.Shuffle$ShuffleError: error in shuffle in fetcher#2\r\n\tat org.apache.hadoop.mapreduce.task.reduce.Shuffle.run(Shuffle.java:136)\r\n\tat org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:377)\r\n\tat org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:174)\r\n\tat java.security.AccessController.doPrivileged(Native Method)\r\n\tat javax.security.auth.Subject.doAs(Subject.java:422)\r\n\tat org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1898)\r\n\tat org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:168)\r\nCaused by: java.lang.OutOfMemoryError: Java heap space\r\n\tat org.apache.hadoop.io.compress.BlockDecompressorStream.getCompressedData(BlockDecompressorStream.java:123)\r\n\tat org.apache.hadoop.io.compress.BlockDecompressorStream.decompress(BlockDecompressorStream.java:98)\r\n\tat org.apache.hadoop.io.compress.DecompressorStream.read(DecompressorStream.java:105)\r\n\tat org.apache.hadoop.io.IOUtils.readFully(IOUtils.java:210)\r\n\tat org.apache.hadoop.mapreduce.task.reduce.InMemoryMapOutput.doShuffle(InMemoryMapOutput.java:91)\r\n{code}\r\n*Configuration* - mapred-site.xml\r\n{code:java}\r\nmapreduce.shuffle.ssl.enabled=true\r\n{code}\r\nAlternative is to build a custom jar where *FadvisedFileRegion* is replaced with *FadvisedChunkedFile* in {*}sendMapOutput{*}.\r\n\r\n*Reproduction*\r\n{code:java}\r\nhdfs dfs -rm -r -skipTrash /tmp/sort_input\r\nhdfs dfs -rm -r -skipTrash /tmp/sort_output\r\nyarn jar hadoop-3.4.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0-SNAPSHOT.jar randomwriter \"-Dmapreduce.randomwriter.totalbytes=10000000000\" /tmp/sort_input\r\nyarn jar hadoop-3.4.0-SNAPSHOT/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.4.0-SNAPSHOT.jar sort -Dmapreduce.job.reduce.slowstart.completedmaps=1 -r 40 /tmp/sort_input /tmp/sort_output | tee sort_app_output.txt\r\n{code}\r\nh3. ShuffleHandler's protocol\r\n{code:java}\r\n// HTTP Request\r\nGET /mapOutput?job=job_1672901779104_0001&reduce=0&map=attempt_1672901779104_0001_m_000003_0,attempt_1672901779104_0001_m_000002_0,attempt_1672901779104_0001_m_000001_0,attempt_1672901779104_0001_m_000000_0,attempt_1672901779104_0001_m_000005_0,attempt_1672901779104_0001_m_000012_0,attempt_1672901779104_0001_m_000009_0,attempt_1672901779104_0001_m_000010_0,attempt_1672901779104_0001_m_000007_0,attempt_1672901779104_0001_m_000011_0,attempt_1672901779104_0001_m_000008_0,attempt_1672901779104_0001_m_000013_0,attempt_1672901779104_0001_m_000014_0,attempt_1672901779104_0001_m_000015_0,attempt_1672901779104_0001_m_000019_0,attempt_1672901779104_0001_m_000018_0,attempt_1672901779104_0001_m_000016_0,attempt_1672901779104_0001_m_000017_0,attempt_1672901779104_0001_m_000020_0,attempt_1672901779104_0001_m_000023_0 HTTP/1.1\r\n+ keep alive headers\r\n\r\n// HTTP Response Headers\r\ncontent-length=sum(serialised ShuffleHeader in bytes + MapOutput size)\r\n+ keep alive headers\r\n\r\n// Response Data (transfer-encoding=chunked)\r\nserialised ShuffleHeader\r\ncontent of the MapOutput file (start offset - length)\r\nserialised ShuffleHeader\r\ncontent of the MapOutput file (start offset - length)\r\nserialised ShuffleHeader\r\ncontent of the MapOutput file (start offset - length)\r\nserialised ShuffleHeader\r\ncontent of the MapOutput file (start offset - length)\r\n...\r\nLastHttpContent\r\n// close socket if no keep-alive\r\n{code}\r\nh3. Issues\r\n - {*}setResponseHeaders{*}: did not always set the the content-length, also the transfer-encoding=chunked header was missing.\r\n - {*}ReduceMapFileCount.operationComplete{*}: messed up the futures on the LastHttpContent\r\n - {*}ChannelGroup accepted{*}: is only used to close the channels, no need for that magic 5. See the details [here|https://netty.io/4.0/api/io/netty/channel/group/ChannelGroup.html].\r\n - {*}bossGroup{*}: should have only 1 thread for accepting connections.\r\n - {*}Shuffle{*}: is unnecessarily Sharable, the 3 async sendMap / channel (see below) caused future errors when using FadvisedChunkedFile\r\n\r\nh3. Max session open files is not an optimisation, it's actually wasting resources\r\n{code:java}\r\n    // by default maxSessionOpenFiles = 3\r\n    for (int i = 0; i < Math.min(handlerCtx.maxSessionOpenFiles, mapIds.size()); i++) {\r\n      ChannelFuture nextMap = sendMap(reduceContext);\r\n      if(nextMap == null) {\r\n        return;\r\n      }\r\n    }\r\n{code}\r\n!sendMapPipeline.png!\r\n\r\nAt the end of the day, we create a http chunked stream, there is no need to run 3 sendMap async, the futures will finish one-by-one sequentially. The osCache magic from the FAdvised classes won't happen either, because the first readChunk will be called only later.\r\n\r\nSo this can be simplified a lot:\r\n{code:java}\r\nsendMap(reduceContext);\r\n{code}\r\nh3. My proposal\r\n\r\nSome refactoring: ShuffleHandler is split into multiple classes to make it possible to remove the sharable annotation.\r\n - ShuffleChannel\r\n - ShuffleChannelInitializer\r\n - ShuffleChannelHandlerContext\r\n - ShuffleChannelHandler\r\n\r\nTODO:\r\n - fix/drop/refactor the existing unit tests\r\n - add proper unit test that tests SSL/non-SSL mode where the response data is properly verified\r\n - documentation about the protocol\r\n\r\nWIP: [github.com/tomicooler/hadoop|https://github.com/tomicooler/hadoop/commit/3bc027598aea4a3b02a1997fe5d485b9a6e5c41e]\r\nh3. Netty useful docs\r\n * [User guide for 4.x|https://netty.io/wiki/user-guide-for-4.x.html]\r\n * [New and noteworthy in 4.0|https://netty.io/wiki/new-and-noteworthy-in-4.0.html]\r\n * [Reference counted objects|https://netty.io/wiki/reference-counted-objects.html] \u00a0 (it will be changed in [Netty 5|https://netty.io/wiki/new-and-noteworthy-in-5.0.html])\r\n * HttpStaticFileServer [example|https://github.com/netty/netty/blob/4.1/example/src/main/java/io/netty/example/http/file/HttpStaticFileServerHandler.java]",
+        "commits": [
+            {
+                "sha": "ea8f12ade37f0739ddb48d317bea64c4c2ba59b1",
+                "message": "MAPREDUCE-7431. ShuffleHandler refactor and fix after Netty4 upgrade.",
+                "author": "tomicooler",
+                "date": "2023-01-09T14:28:02Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 710,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 0,
+                        "STATUS": "A"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandlerContext.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandlerContext.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 122,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 0,
+                        "STATUS": "A"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelInitializer.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelInitializer.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 71,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 0,
+                        "STATUS": "A"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 122,
+                        "LINES_DELETED": 910,
+                        "PARENT_LOC": 1532,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 598,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 0,
+                        "STATUS": "A"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 206,
+                        "LINES_DELETED": 1679,
+                        "PARENT_LOC": 2021,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 137,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 0,
+                        "STATUS": "A"
+                    }
+                ]
+            },
+            {
+                "sha": "8fefb83f680483ba0f8efa0094e22ab1d6f8bf8e",
+                "message": "checkstyle fixes",
+                "author": "tomicooler",
+                "date": "2023-01-18T16:40:34Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 13,
+                        "LINES_DELETED": 10,
+                        "PARENT_LOC": 710,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "6c572c8c9c7f67117069c7c67228a608dd24021a",
+                "message": "fix javadoc/checktyle",
+                "author": "tomicooler",
+                "date": "2023-01-19T07:32:24Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 4,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 713,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandlerContext.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandlerContext.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 18,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 122,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelInitializer.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelInitializer.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 6,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 71,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 11,
+                        "LINES_DELETED": 6,
+                        "PARENT_LOC": 744,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 3,
+                        "LINES_DELETED": 39,
+                        "PARENT_LOC": 598,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 31,
+                        "PARENT_LOC": 548,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 35,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 137,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "59a1f409101c47c76bb3078987a4cd41f4f68e63",
+                "message": "Trigger the jenkins job",
+                "author": "tomicooler",
+                "date": "2023-01-19T10:05:10Z",
+                "files": []
+            }
+        ],
+        "sha_before": "17c8cdf63c27425633f96031fca325abb87f7ddf",
+        "sha_after": "151b71d7affbbaadab5af7943f824f6ae6a6f47b",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 715,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 0,
+                "STATUS": "A"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandlerContext.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelHandlerContext.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 140,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 0,
+                "STATUS": "A"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelInitializer.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleChannelInitializer.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 74,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 0,
+                "STATUS": "A"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/main/java/org/apache/hadoop/mapred/ShuffleHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 133,
+                "LINES_DELETED": 916,
+                "PARENT_LOC": 1532,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 562,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 0,
+                "STATUS": "A"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 177,
+                "LINES_DELETED": 1680,
+                "PARENT_LOC": 2021,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 172,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 0,
+                "STATUS": "A"
+            }
+        ]
+    },
+    "MAPREDUCE-7469": {
+        "jira_id": "MAPREDUCE-7469",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "NNBench createControlFiles should use thread pool to improve performance.",
+        "description": "NNBench is a good tool for NN performance test. And with multiples maps it will wait long time in createControlFiles.\u00a0 This can use thread pool to increase concurrency.",
+        "commits": [
+            {
+                "sha": "e9aaaeafb278cbd0110816a24ce45c5ddbe570c6",
+                "message": "MAPREDUCE-7469 NNBench createControlFiles should use thread pool to improve performance.",
+                "author": "lgh",
+                "date": "2024-01-18T08:19:53Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 44,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 1002,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/TestNNBench.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/TestNNBench.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 20,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 105,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "82d36c86eb4d8b05070ed57c24e6f55de0280cf8",
+                "message": "Optimization error log",
+                "author": "lgh",
+                "date": "2024-01-19T07:30:39Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 3,
+                        "PARENT_LOC": 1044,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "689fa7d93e9629b927215bb90f963caf82032068",
+                "message": "spawn executorService in createControlFiles()",
+                "author": "lgh",
+                "date": "2024-01-29T03:20:38Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 2,
+                        "LINES_DELETED": 2,
+                        "PARENT_LOC": 1043,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "d910acbeee2985c328884f5bd9c6792118c05119",
+                "message": "triggle compile only",
+                "author": "lgh",
+                "date": "2024-03-05T12:52:46Z",
+                "files": []
+            }
+        ],
+        "sha_before": "8cd4704e0a1ab2ba941e296b8799e288f901bc4f",
+        "sha_after": "a60b5e2de3072c15f868ad1d06c8b32dac2e5cc6",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/NNBench.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 43,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 1002,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/TestNNBench.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/hdfs/TestNNBench.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 20,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 105,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7503": {
+        "jira_id": "MAPREDUCE-7503",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Fix ByteBuf leaks in TestShuffleChannelHandler",
+        "description": "A lot of ByteBuf leaks are reported when running with JDK23.\r\n\r\nI have not idea why those are not detected with JDK8, 11 or 17. Maybe something about the logging setup ?",
+        "commits": [
+            {
+                "sha": "e252de3bcf40124251e60f4dc777752311fab9b0",
+                "message": "HADOOP-19498. Fix ByteBuf leaks in TestShuffleChannelHandler",
+                "author": "stoty",
+                "date": "2025-03-12T20:53:11Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 37,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 561,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 7,
+                        "LINES_DELETED": 0,
+                        "PARENT_LOC": 173,
+                        "STATUS": "M"
+                    }
+                ]
+            },
+            {
+                "sha": "7384215ac9bcfddfa959b11a5828343983c83b0c",
+                "message": "fix checkstyle warnings",
+                "author": "stoty",
+                "date": "2025-03-13T05:12:12Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 8,
+                        "LINES_DELETED": 11,
+                        "PARENT_LOC": 597,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "b73796a43c78149ac52da8d616b0a6732aeb1ecf",
+        "sha_after": "cd8f18b71d2e52c9cc8df30fbe7082931f928d1d",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleChannelHandler.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 35,
+                "LINES_DELETED": 2,
+                "PARENT_LOC": 561,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-shuffle/src/test/java/org/apache/hadoop/mapred/TestShuffleHandlerBase.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 7,
+                "LINES_DELETED": 0,
+                "PARENT_LOC": 173,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7504": {
+        "jira_id": "MAPREDUCE-7504",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "[JDK24] Remove terminally deprecated Thread.suspend from TestMergeManager",
+        "description": "TestMergeManager uses the terminally deprecated Thread.suspend() method which as been removed from recent Java versions.\r\n\r\nRefactor the test avoid suspend.",
+        "commits": [
+            {
+                "sha": "9ebb5f6de003acb82bf20900a0614e40ae99aab3",
+                "message": "MAPREDUCE-7504. Remove terminally deprecated Thread.suspend from TestMergeManager",
+                "author": "stoty",
+                "date": "2025-03-17T15:11:52Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/task/reduce/TestMergeManager.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/task/reduce/TestMergeManager.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 23,
+                        "LINES_DELETED": 23,
+                        "PARENT_LOC": 312,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "f9f9aeefc6c2efa430b7341b8003ef447041ef4c",
+        "sha_after": "71a945ac869c932c7991ce573e6b72aaeed152fc",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/task/reduce/TestMergeManager.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/test/java/org/apache/hadoop/mapreduce/task/reduce/TestMergeManager.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 23,
+                "LINES_DELETED": 23,
+                "PARENT_LOC": 312,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7505": {
+        "jira_id": "MAPREDUCE-7505",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "[JDK18] Remove obsolete SecurityManager code from TestPipeApplication",
+        "description": "The test has already been rewritten to use ExitUtil , but the the SecurityManager-related calls haven't been removed.",
+        "commits": [
+            {
+                "sha": "4df7fbb6424800fd2e26401ada6b6ac2533145cd",
+                "message": "MAPREDUCE-7505. Remove obsolete SecurityManager code from TestPipeApplication",
+                "author": "stoty",
+                "date": "2025-03-14T14:04:51Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/pipes/TestPipeApplication.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/pipes/TestPipeApplication.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 0,
+                        "LINES_DELETED": 5,
+                        "PARENT_LOC": 835,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "40c700006ec8f0dbfee943f450c457d6071ef47f",
+        "sha_after": "7ec801fd5c8ced33f360dacea5700382766a8bbd",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/pipes/TestPipeApplication.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/pipes/TestPipeApplication.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 0,
+                "LINES_DELETED": 5,
+                "PARENT_LOC": 835,
+                "STATUS": "M"
+            }
+        ]
+    },
+    "MAPREDUCE-7521": {
+        "jira_id": "MAPREDUCE-7521",
+        "issue_type": "Improvement",
+        "resolution": "Fixed",
+        "title": "Fix TestUberAM failures after JUnit 5 migration",
+        "description": "*Background:*\r\n\r\nAfter migrating the project to {*}JUnit 5{*}, the {{TestUberAM}} unit test started failing intermittently. The error message observed during test execution is as follows:\r\n{code:java}\r\nRemote File /apps_staging_dir/jenkins/.staging/job_1759472296837_0013/job.jar could only be written to 0 of the 1 minReplication nodes.\u00a0\r\nThere are 2 datanode(s) running and 2 node(s) are excluded in this operation. {code}\r\nThis error originates from\r\n{code:java}\r\norg.apache.hadoop.hdfs.server.blockmanagement.BlockManager.chooseTarget4NewBlock {code}\r\nindicating that the MiniDFSCluster used in the test failed to find available data nodes for block writes during execution.\r\n\r\n*Change Summary:*\r\n * Removed redundant invocation of the parent class\u2019s {{BeforeAll}} method in subclasses to prevent double initialization.\r\n\r\n * Increased MiniDFSCluster data node count from 2 to 5 to improve fault tolerance.\r\n\r\n * Verified that all affected tests pass successfully.\r\n\r\n*Impact Scope:*\r\n * Affects only AM tests based on MiniDFSCluster.\r\n\r\n * No impact on business logic or production code.",
+        "commits": [
+            {
+                "sha": "2f4cb93aa02b48b1ea68754f49c99c9f583d78e2",
+                "message": "fix TestUberAM Junit Error.",
+                "author": "slfan1989",
+                "date": "2025-10-08T06:03:32Z",
+                "files": [
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestMRJobs.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestMRJobs.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 1,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 1468,
+                        "STATUS": "M"
+                    },
+                    {
+                        "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestUberAM.java",
+                        "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestUberAM.java",
+                        "PATH_CHANGED": false,
+                        "LINES_ADDED": 0,
+                        "LINES_DELETED": 1,
+                        "PARENT_LOC": 167,
+                        "STATUS": "M"
+                    }
+                ]
+            }
+        ],
+        "sha_before": "c83481e2dc2682cf5e4633648ca94246f69e1857",
+        "sha_after": "a170ff40d9ef3936bac13a9d84011d0ad9355e35",
+        "IMPACTED_FILES": [
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestMRJobs.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestMRJobs.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 1,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 1468,
+                "STATUS": "M"
+            },
+            {
+                "PARENT_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestUberAM.java",
+                "CHILD_PATH": "hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapreduce/v2/TestUberAM.java",
+                "PATH_CHANGED": false,
+                "LINES_ADDED": 0,
+                "LINES_DELETED": 1,
+                "PARENT_LOC": 167,
+                "STATUS": "M"
+            }
+        ]
+    }
+}
